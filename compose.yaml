@@ -1,0 +1,16 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Containerfile
+    ports:
+      - "${PORT:-8080}:8080"
+    environment:
+      PORT: "8080"
+      DB_PATH: /data/counters.db
+      MAX_COUNTERS: "${MAX_COUNTERS:-100}"
+    volumes:
+      - counter_data:/data
+
+volumes:
+  counter_data:
