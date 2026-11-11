@@ -6,7 +6,7 @@ import (
 
 type Counter struct {
 	Name           string
-	LastIncidentAt time.Time
+	lastIncidentAt time.Time
 }
 
 func Days(since time.Time, now time.Time) int {
@@ -21,6 +21,10 @@ func (c *Counter) Reset() {
 	c.reset(time.Now())
 }
 
+func (c *Counter) LastIncidentAt() time.Time {
+	return c.lastIncidentAt
+}
+
 func (c *Counter) reset(now time.Time) {
-	c.LastIncidentAt = now
+	c.lastIncidentAt = now
 }
