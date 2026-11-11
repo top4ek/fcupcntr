@@ -8,14 +8,15 @@ import (
 )
 
 func TestReset(t *testing.T) {
+	name := "Skynet"
 	now := fixedTime()
 	counter := Counter{
-		Name:           "Skynet",
+		Name:           name,
 		lastIncidentAt: now.Add(-48 * time.Hour),
 	}
 	counter.reset(now)
 	assert.Equal(t, now, counter.LastIncidentAt())
-	assert.Equal(t, "Skynet", counter.Name)
+	assert.Equal(t, name, counter.Name)
 }
 
 func TestNew(t *testing.T) {
@@ -43,25 +44,31 @@ func TestDaysStruct(t *testing.T) {
 func TestDays(t *testing.T) {
 	now := fixedTime()
 	cases := []struct {
+		name   string
 		since  time.Time
 		result int
 	}{
 		{
+			name:   "One day",
 			since:  now.Add(-24 * time.Hour),
 			result: 1,
 		},
 		{
+			name:   "Almost one day but not",
 			since:  now.Add(-23*time.Hour - 59*time.Minute),
 			result: 0,
 		},
 		{
+			name:   "Accident from future",
 			since:  now.Add(48 * time.Hour),
 			result: 0,
 		},
 	}
 
 	for _, example := range cases {
-		assert.Equal(t, example.result, Days(example.since, now))
+		t.Run(example.name, func(t *testing.T) {
+			assert.Equal(t, example.result, Days(example.since, now))
+		})
 	}
 }
 

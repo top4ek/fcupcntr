@@ -14,7 +14,7 @@ build: ## Build the application binary
 	$(GO) build -buildvcs=false -o bin/fcupcntr ./cmd/fcupcntr
 
 test: ## Run Go tests
-	$(GO) test ./...
+	$(GO) test ./... -v
 
 test-race: ## Run Go tests with the race detector
 	$(GO) test -race ./...
