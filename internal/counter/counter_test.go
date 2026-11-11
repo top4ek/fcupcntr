@@ -29,6 +29,17 @@ func TestNew(t *testing.T) {
 	assert.False(t, counter.LastIncidentAt().After(after))
 }
 
+func TestDaysStruct(t *testing.T) {
+	now := fixedTime()
+	counter := Counter{
+		Name:           "Skynet",
+		lastIncidentAt: now.Add(-49 * time.Hour),
+	}
+	assert.Equal(t, 2, counter.Days(now))
+	counter.reset(now)
+	assert.Equal(t, 0, counter.Days(now))
+}
+
 func TestDays(t *testing.T) {
 	now := fixedTime()
 	cases := []struct {

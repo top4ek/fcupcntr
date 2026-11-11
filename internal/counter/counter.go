@@ -17,6 +17,10 @@ func Days(since time.Time, now time.Time) int {
 	return int(duration / (24 * time.Hour))
 }
 
+func (c Counter) Days(now time.Time) int {
+	return Days(c.lastIncidentAt, now)
+}
+
 func (c *Counter) Reset() {
 	c.reset(time.Now())
 }
