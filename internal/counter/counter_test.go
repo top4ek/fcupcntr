@@ -18,6 +18,17 @@ func TestReset(t *testing.T) {
 	assert.Equal(t, "Skynet", counter.Name)
 }
 
+func TestNew(t *testing.T) {
+	name := "Paralelepipedik"
+	before := time.Now()
+	counter := New(name)
+	after := time.Now()
+
+	assert.Equal(t, name, counter.Name)
+	assert.False(t, counter.LastIncidentAt().Before(before))
+	assert.False(t, counter.LastIncidentAt().After(after))
+}
+
 func TestDays(t *testing.T) {
 	now := fixedTime()
 	cases := []struct {

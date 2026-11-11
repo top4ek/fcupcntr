@@ -25,6 +25,13 @@ func (c *Counter) LastIncidentAt() time.Time {
 	return c.lastIncidentAt
 }
 
+func New(name string) Counter {
+	return Counter{
+		Name:           name,
+		lastIncidentAt: time.Now(),
+	}
+}
+
 func (c *Counter) reset(now time.Time) {
 	c.lastIncidentAt = now
 }
