@@ -9,6 +9,7 @@ import (
 type Counter struct {
 	name           string
 	lastIncidentAt time.Time
+	createdAt      time.Time
 }
 
 var ErrEmptyName = errors.New("name missing")
@@ -25,6 +26,10 @@ func (c *Counter) Reset() {
 	c.reset(time.Now())
 }
 
+func (c Counter) CreatedAt() time.Time {
+	return c.createdAt
+}
+
 func (c *Counter) LastIncidentAt() time.Time {
 	return c.lastIncidentAt
 }
@@ -34,9 +39,11 @@ func New(name string) (Counter, error) {
 	if trimmed == "" {
 		return Counter{}, ErrEmptyName
 	}
+	now := time.Now()
 	return Counter{
 		name:           trimmed,
-		lastIncidentAt: time.Now(),
+		lastIncidentAt: now,
+		createdAt:      now,
 	}, nil
 }
 

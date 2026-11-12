@@ -35,6 +35,19 @@ func TestNewEmptyName(t *testing.T) {
 	}
 }
 
+func TestNewCreatedAt(t *testing.T) {
+	before := time.Now()
+	cntr, err := counter.New("Test")
+	if err != nil {
+		t.Fatalf("%v", err)
+	}
+	after := time.Now()
+
+	assert.Equal(t, cntr.CreatedAt(), cntr.LastIncidentAt())
+	assert.False(t, cntr.CreatedAt().Before(before))
+	assert.False(t, cntr.CreatedAt().After(after))
+}
+
 func TestNew(t *testing.T) {
 	name := "Paralelepipedik"
 	before := time.Now()
