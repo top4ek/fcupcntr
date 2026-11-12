@@ -11,12 +11,12 @@ func TestReset(t *testing.T) {
 	name := "Skynet"
 	now := fixedTime()
 	counter := Counter{
-		Name:           name,
+		name:           name,
 		lastIncidentAt: now.Add(-48 * time.Hour),
 	}
 	counter.reset(now)
 	assert.Equal(t, now, counter.LastIncidentAt())
-	assert.Equal(t, name, counter.Name)
+	assert.Equal(t, name, counter.Name())
 }
 func TestNewEmptyName(t *testing.T) {
 	_, err := New("")
@@ -33,7 +33,7 @@ func TestNew(t *testing.T) {
 	}
 	after := time.Now()
 
-	assert.Equal(t, name, counter.Name)
+	assert.Equal(t, name, counter.Name())
 	assert.False(t, counter.LastIncidentAt().Before(before))
 	assert.False(t, counter.LastIncidentAt().After(after))
 }
@@ -41,7 +41,7 @@ func TestNew(t *testing.T) {
 func TestDaysStruct(t *testing.T) {
 	now := fixedTime()
 	counter := Counter{
-		Name:           "Skynet",
+		name:           "Skynet",
 		lastIncidentAt: now.Add(-49 * time.Hour),
 	}
 	assert.Equal(t, 2, counter.Days(now))

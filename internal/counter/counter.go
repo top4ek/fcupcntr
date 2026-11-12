@@ -6,7 +6,7 @@ import (
 )
 
 type Counter struct {
-	Name           string
+	name           string
 	lastIncidentAt time.Time
 }
 
@@ -18,6 +18,10 @@ func Days(since time.Time, now time.Time) int {
 		return 0
 	}
 	return int(duration / (24 * time.Hour))
+}
+
+func (c Counter) Name() string {
+	return c.name
 }
 
 func (c Counter) Days(now time.Time) int {
@@ -37,7 +41,7 @@ func New(name string) (Counter, error) {
 		return Counter{}, ErrEmptyName
 	}
 	return Counter{
-		Name:           name,
+		name:           name,
 		lastIncidentAt: time.Now(),
 	}, nil
 }
