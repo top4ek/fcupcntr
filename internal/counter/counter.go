@@ -2,6 +2,7 @@ package counter
 
 import (
 	"errors"
+	"strings"
 	"time"
 )
 
@@ -37,11 +38,12 @@ func (c *Counter) LastIncidentAt() time.Time {
 }
 
 func New(name string) (Counter, error) {
-	if name == "" {
+	trimmed := strings.TrimSpace(name)
+	if trimmed == "" {
 		return Counter{}, ErrEmptyName
 	}
 	return Counter{
-		name:           name,
+		name:           trimmed,
 		lastIncidentAt: time.Now(),
 	}, nil
 }
