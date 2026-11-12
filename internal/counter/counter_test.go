@@ -21,7 +21,7 @@ func TestReset(t *testing.T) {
 func TestNewEmptyName(t *testing.T) {
 	_, err := New("")
 
-	assert.Error(t, err)
+	assert.ErrorIs(t, err, ErrEmptyName)
 }
 
 func TestNew(t *testing.T) {

@@ -10,6 +10,8 @@ type Counter struct {
 	lastIncidentAt time.Time
 }
 
+var ErrEmptyName = errors.New("name missing")
+
 func Days(since time.Time, now time.Time) int {
 	duration := now.Sub(since)
 	if duration < 0 {
@@ -32,7 +34,7 @@ func (c *Counter) LastIncidentAt() time.Time {
 
 func New(name string) (Counter, error) {
 	if name == "" {
-		return Counter{}, errors.New("name missing")
+		return Counter{}, ErrEmptyName
 	}
 	return Counter{
 		Name:           name,
