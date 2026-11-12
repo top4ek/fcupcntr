@@ -28,7 +28,12 @@ func run() error {
 	if err != nil {
 		return err
 	}
-	defer database.Close()
+	defer func() {
+		err := database.Close()
+		if err != nil {
+			log.Printf("Database closing error: %v", err)
+		}
+	}()
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /healthz", api.HealthHandler)

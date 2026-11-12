@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"embed"
+	"errors"
 	"io/fs"
 
 	"github.com/pressly/goose/v3"
@@ -21,14 +22,14 @@ func Open(ctx context.Context, dsn string) (*sql.DB, error) {
 
 	err = database.PingContext(ctx)
 	if err != nil {
-		database.Close()
-		return nil, err
+		closeErr := database.Close()
+		return nil, errors.Join(err, closeErr)
 	}
 
 	err = runMigrations(ctx, database)
 	if err != nil {
-		database.Close()
-		return nil, err
+		closeErr := database.Close()
+		return nil, errors.Join(err, closeErr)
 	}
 	return database, nil
 }
