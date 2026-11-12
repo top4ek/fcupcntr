@@ -17,7 +17,7 @@ test: ## Run Go tests
 	$(GO) test ./... -v
 
 test-race: ## Run Go tests with the race detector
-	$(GO) test -race ./...
+	$(GO) test -race ./... -v
 
 fmt: ## Check gofmt formatting
 	@test -z "$$(gofmt -l .)"
@@ -27,7 +27,7 @@ vet: ## Run go vet
 
 lint: ## Run golangci-lint
 	@test -x "$(GOLANGCI_LINT)" || { echo 'golangci-lint is missing; run make lint-install' >&2; exit 1; }
-	$(GOLANGCI_LINT) run ./...
+	$(GOLANGCI_LINT) run ./... -v
 
 lint-install: ## Install the pinned golangci-lint version
 	$(GO) install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@$(GOLANGCI_LINT_VERSION)

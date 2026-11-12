@@ -18,11 +18,19 @@ func TestReset(t *testing.T) {
 	assert.Equal(t, now, counter.LastIncidentAt())
 	assert.Equal(t, name, counter.Name)
 }
+func TestNewEmptyName(t *testing.T) {
+	_, err := New("")
+
+	assert.Error(t, err)
+}
 
 func TestNew(t *testing.T) {
 	name := "Paralelepipedik"
 	before := time.Now()
-	counter := New(name)
+	counter, err := New(name)
+	if err != nil {
+		t.Fatalf("%v", err)
+	}
 	after := time.Now()
 
 	assert.Equal(t, name, counter.Name)

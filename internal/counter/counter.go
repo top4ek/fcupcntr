@@ -1,6 +1,7 @@
 package counter
 
 import (
+	"errors"
 	"time"
 )
 
@@ -29,11 +30,14 @@ func (c *Counter) LastIncidentAt() time.Time {
 	return c.lastIncidentAt
 }
 
-func New(name string) Counter {
+func New(name string) (Counter, error) {
+	if name == "" {
+		return Counter{}, errors.New("name missing")
+	}
 	return Counter{
 		Name:           name,
 		lastIncidentAt: time.Now(),
-	}
+	}, nil
 }
 
 func (c *Counter) reset(now time.Time) {
