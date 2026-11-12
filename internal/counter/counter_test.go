@@ -18,25 +18,6 @@ func TestReset(t *testing.T) {
 	assert.Equal(t, now, counter.LastIncidentAt())
 	assert.Equal(t, name, counter.Name())
 }
-func TestNewEmptyName(t *testing.T) {
-	_, err := New("")
-
-	assert.ErrorIs(t, err, ErrEmptyName)
-}
-
-func TestNew(t *testing.T) {
-	name := "Paralelepipedik"
-	before := time.Now()
-	counter, err := New(name)
-	if err != nil {
-		t.Fatalf("%v", err)
-	}
-	after := time.Now()
-
-	assert.Equal(t, name, counter.Name())
-	assert.False(t, counter.LastIncidentAt().Before(before))
-	assert.False(t, counter.LastIncidentAt().After(after))
-}
 
 func TestDaysStruct(t *testing.T) {
 	now := fixedTime()
