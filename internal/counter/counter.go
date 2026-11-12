@@ -13,20 +13,12 @@ type Counter struct {
 
 var ErrEmptyName = errors.New("name missing")
 
-func Days(since time.Time, now time.Time) int {
-	duration := now.Sub(since)
-	if duration < 0 {
-		return 0
-	}
-	return int(duration / (24 * time.Hour))
-}
-
 func (c Counter) Name() string {
 	return c.name
 }
 
-func (c Counter) Days(now time.Time) int {
-	return Days(c.lastIncidentAt, now)
+func (c Counter) Days(current time.Time) int {
+	return days(c.lastIncidentAt, current)
 }
 
 func (c *Counter) Reset() {
@@ -46,6 +38,14 @@ func New(name string) (Counter, error) {
 		name:           trimmed,
 		lastIncidentAt: time.Now(),
 	}, nil
+}
+
+func days(since time.Time, now time.Time) int {
+	duration := now.Sub(since)
+	if duration < 0 {
+		return 0
+	}
+	return int(duration / (24 * time.Hour))
 }
 
 func (c *Counter) reset(now time.Time) {
