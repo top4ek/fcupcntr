@@ -7,6 +7,7 @@ import (
 )
 
 type Counter struct {
+	id             string
 	name           string
 	lastIncidentAt time.Time
 	createdAt      time.Time
@@ -24,6 +25,19 @@ func (c Counter) Days(current time.Time) int {
 
 func (c *Counter) Reset() {
 	c.reset(time.Now())
+}
+
+func (c Counter) ID() string {
+	return c.id
+}
+
+func Restore(id, name string, createdAt, lastIncidentAt time.Time) Counter {
+	return Counter{
+		id:             id,
+		name:           name,
+		lastIncidentAt: lastIncidentAt,
+		createdAt:      createdAt,
+	}
 }
 
 func (c Counter) CreatedAt() time.Time {
