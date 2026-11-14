@@ -22,6 +22,25 @@ func NewCounterRepository(database *sql.DB) *CounterRepository {
 		database: database,
 	}
 }
+
+func (r *CounterRepository) UpdateIncident(ctx context.Context, cntr counter.Counter) error {
+	query := "UPDATE counters SET last_incident_at = ? WHERE id = ?"
+
+	lastIncidentAt := cntr.LastIncidentAt().Unix()
+	result, err := r.database.ExecContext(ctx, query, lastIncidentAt, cntr.ID())
+	if err != nil {
+		return err
+	}
+	affected, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+	if affected == 0 {
+		return ErrNotFound
+	}
+	return nil
+}
+
 func (r *CounterRepository) Find(ctx context.Context, id string) (counter.Counter, error) {
 	query := "SELECT id, name, created_at, last_incident_at FROM counters WHERE id = ?"
 
@@ -43,8 +62,8 @@ func (r *CounterRepository) Find(ctx context.Context, id string) (counter.Counte
 	return counter.Restore(
 		uuid,
 		name,
-		time.Unix(0, createdAt),
-		time.Unix(0, lastIncidentAt),
+		time.Unix(createdAt, 0),
+		time.Unix(lastIncidentAt, 0),
 	), nil
 }
 
@@ -54,8 +73,8 @@ func (r *CounterRepository) Create(ctx context.Context, cntr counter.Counter) (c
 		return cntr, err
 	}
 
-	createdAt := cntr.CreatedAt().UnixNano()
-	lastIncidentAt := cntr.LastIncidentAt().UnixNano()
+	createdAt := cntr.CreatedAt().Unix()
+	lastIncidentAt := cntr.LastIncidentAt().Unix()
 
 	query := "INSERT INTO counters (id, name, created_at, last_incident_at) VALUES (?, ?, ?, ?)"
 
