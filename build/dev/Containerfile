@@ -1,0 +1,15 @@
+FROM golang:1.27-alpine
+
+RUN apk add --no-cache ca-certificates git
+
+ENV GO111MODULE=on \
+  GOOS=linux \
+  CGO_ENABLED=0 \
+  GOFLAGS=-buildvcs=false \
+  GOCACHE=/go/cache
+
+RUN go install github.com/cespare/reflex@v0.3.2
+
+WORKDIR /opt/app
+
+ENTRYPOINT ["reflex", "-d", "plain", "-c", "/opt/app/build/dev/reflex.conf"]

@@ -1,7 +1,12 @@
 .git
 .github
+.vscode
+.idea
 bin
+docs
+.codegraph
+.env
+**/.env
 *.db
 *.db-*
-.env
-docs
+*.coverprofile

@@ -2,4 +2,6 @@
 *.db
 *.db-*
 .env
+build/dev/.env
+build/prod/.env
 *.coverprofile

@@ -4,6 +4,9 @@ on:
   push:
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   check:
     runs-on: ubuntu-latest
@@ -13,10 +16,43 @@ jobs:
         with:
           go-version-file: go.mod
       - name: Validate infrastructure
-        run: make fmt compose-check
+        run: make compose-check
       - name: Install linter
-        if: hashFiles('cmd/fcupcntr/main.go') != ''
         run: make lint-install
       - name: Check application
-        if: hashFiles('cmd/fcupcntr/main.go') != ''
         run: make ci
+
+  # image:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v7
+  #     - uses: docker/setup-buildx-action@v4
+  #     - name: Build production image
+  #       uses: docker/build-push-action@v7
+  #       with:
+  #         context: .
+  #         file: build/prod/Containerfile
+  #         pull: true
+  #         push: false
+  #
+  # publish:
+  #   needs: [check, image]
+  #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v7
+  #     - uses: docker/setup-buildx-action@v4
+  #     - uses: docker/login-action@v4
+  #       with:
+  #         username: ${{ secrets.DOCKERHUB_USERNAME }}
+  #         password: ${{ secrets.DOCKERHUB_TOKEN }}
+  #     - name: Publish production image
+  #       uses: docker/build-push-action@v7
+  #       with:
+  #         context: .
+  #         file: build/prod/Containerfile
+  #         pull: true
+  #         push: true
+  #         tags: |
+  #           top4ek/fcupcntr:latest
+  #           top4ek/fcupcntr:sha-${{ github.sha }}
